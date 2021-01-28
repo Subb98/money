@@ -45,6 +45,12 @@ final class BcMathCalculator implements Calculator
      */
     public function add($amount, $addend)
     {
+        $number = Number::fromNumber($addend);
+
+        if (!$number->isGreaterThanZero()) {
+            throw new \InvalidArgumentException('Expected a value greater than zero. Got: ' . $addend);
+        }
+
         return (string) Number::fromString(bcadd($amount, $addend, $this->scale));
     }
 
@@ -58,7 +64,13 @@ final class BcMathCalculator implements Calculator
      */
     public function subtract($amount, $subtrahend)
     {
-        return (string) Number::fromString(bcsub($amount, $subtrahend, $this->scale));
+        $number = Number::fromString(bcsub($amount, $subtrahend, $this->scale));
+
+        if ($number->isLessThanZero()) {
+            throw new \InvalidArgumentException('Balance cannot be less than zero');
+        }
+
+        return (string) $number;
     }
 
     /**
