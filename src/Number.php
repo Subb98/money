@@ -159,6 +159,22 @@ final class Number
     }
 
     /**
+     * @return bool
+     */
+    public function isGreaterThanZero()
+    {
+        return $this->integerPart[0] !== '-' && $this->integerPart !== '0';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLessThanZero()
+    {
+        return $this->integerPart[0] === '-';
+    }
+
+    /**
      * @return string
      */
     public function getIntegerPart()

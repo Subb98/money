@@ -32,6 +32,12 @@ final class PhpCalculator implements Calculator
      */
     public function add($amount, $addend)
     {
+        $number = Number::fromNumber($addend);
+
+        if (!$number->isGreaterThanZero()) {
+            throw new \InvalidArgumentException('Expected a value greater than zero. Got: ' . $addend);
+        }
+
         $result = $amount + $addend;
 
         $this->assertInteger($result);
@@ -47,6 +53,12 @@ final class PhpCalculator implements Calculator
         $result = $amount - $subtrahend;
 
         $this->assertInteger($result);
+
+        $number = Number::fromNumber($result);
+
+        if ($number->isLessThanZero()) {
+            throw new \InvalidArgumentException('Balance cannot be less than zero');
+        }
 
         return (string) $result;
     }

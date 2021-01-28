@@ -60,6 +60,12 @@ final class GmpCalculator implements Calculator
      */
     public function add($amount, $addend)
     {
+        $number = Number::fromNumber($addend);
+
+        if (!$number->isGreaterThanZero()) {
+            throw new \InvalidArgumentException('Expected a value greater than zero. Got: ' . $addend);
+        }
+
         return gmp_strval(gmp_add($amount, $addend));
     }
 
@@ -68,7 +74,13 @@ final class GmpCalculator implements Calculator
      */
     public function subtract($amount, $subtrahend)
     {
-        return gmp_strval(gmp_sub($amount, $subtrahend));
+        $number = Number::fromString($result = gmp_strval(gmp_sub($amount, $subtrahend)));
+
+        if ($number->isLessThanZero()) {
+            throw new \InvalidArgumentException('Balance cannot be less than zero');
+        }
+
+        return $result;
     }
 
     /**
